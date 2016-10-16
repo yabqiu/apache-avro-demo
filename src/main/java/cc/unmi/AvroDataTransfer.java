@@ -13,17 +13,18 @@ public class AvroDataTransfer {
     public static void main(String[] args) throws IOException {
         User originalUser =  new User("Yanbin", "Chicago");
         User deserializedUser = deserializeUser(serializeUser(originalUser));
-        System.out.println(deserializedUser == originalUser);
-        System.out.println(deserializedUser);
+        System.out.println("Same object? " + (deserializedUser == originalUser));
+        System.out.println("Objects equal? " + (deserializedUser.equals(originalUser)));
+        System.out.println("All fields: " + deserializedUser);
     }
 
-    private static byte[] serializeUser(User user) throws IOException {
-        DatumWriter<User> userDatumWriter = new SpecificDatumWriter<>(User.class);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BinaryEncoder binaryEncoder = EncoderFactory.get().directBinaryEncoder(outputStream, null);
-        userDatumWriter.write(user, binaryEncoder);
-        return outputStream.toByteArray();
-    }
+private static byte[] serializeUser(User user) throws IOException {
+    DatumWriter<User> userDatumWriter = new SpecificDatumWriter<>(User.class);
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    BinaryEncoder binaryEncoder = EncoderFactory.get().directBinaryEncoder(outputStream, null);
+    userDatumWriter.write(user, binaryEncoder);
+    return outputStream.toByteArray();
+}
 
     private static User deserializeUser(byte[] data) throws IOException {
         DatumReader<User> userDatumReader = new SpecificDatumReader<>(User.class);
